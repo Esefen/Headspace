@@ -14,6 +14,9 @@ TextureImporter:
     21300018: ATLAS_UI_4_credit_romain
     21300020: ATLAS_UI_hedspce
     21300022: ATLAS_UI_thx
+    21300024: ATLAS_UI_return3
+    21300026: ATLAS_UI_play3
+    21300028: ATLAS_UI_cancel
   externalObjects: {}
   serializedVersion: 7
   mipmaps:
@@ -304,7 +307,7 @@ TextureImporter:
         width: 447
         height: 118
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -319,10 +322,70 @@ TextureImporter:
       name: ATLAS_UI_thx
       rect:
         serializedVersion: 2
-        x: 904
-        y: 829
-        width: 990
-        height: 432
+        x: 1136
+        y: 0
+        width: 912
+        height: 351
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8f1011b100f7a874fadafeab5d800168
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ATLAS_UI_return3
+      rect:
+        serializedVersion: 2
+        x: 860
+        y: 971
+        width: 300
+        height: 301
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a67daaa910983964ebb01165eba65dd2
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ATLAS_UI_play3
+      rect:
+        serializedVersion: 2
+        x: 872
+        y: 684
+        width: 256
+        height: 260
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 059613534290fb540a8c4d82af2e3f3f
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ATLAS_UI_cancel
+      rect:
+        serializedVersion: 2
+        x: 770
+        y: 1839
+        width: 183
+        height: 183
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -330,7 +393,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8f1011b100f7a874fadafeab5d800168
+      spriteID: 6806a346bb11e7f47a498b8c0239df4a
       vertices: []
       indices: 
       edges: []
