@@ -5,9 +5,9 @@ using UnityEngine;
 public class PlayerSoundscape : MonoBehaviour
 {
     const float threshold = 0.65f;
-
     float xMin, yMin;
-    Vector2 center;
+    Vector2 center, topLeft, topRight, bottomLeft, bottomRight;
+    bool connectedToCorner = false;
 
     Question currentQuestion;
     public AudioClip testHautGauche;
@@ -22,7 +22,12 @@ public class PlayerSoundscape : MonoBehaviour
 
         xMin = 1 - threshold;
         yMin = 1 - threshold;
+
         center = new Vector2(Screen.width / 2, Screen.height / 2);
+        topLeft = new Vector2(0, Screen.height);
+        topRight = new Vector2(Screen.width, Screen.height);
+        bottomLeft = new Vector2(0, 0);
+        bottomRight = new Vector2(Screen.width, 0);
     }
 
     // Update is called once per frame
@@ -35,11 +40,13 @@ public class PlayerSoundscape : MonoBehaviour
             {
                 Vector2 pos = new Vector2(Input.mousePosition.x / Screen.width, Input.mousePosition.y / Screen.height);
                 UpdateInteractiveSoundscape(pos);
-                UpdateSoundVolume(pos);
+                if (connectedToCorner)
+                    UpdateSoundVolume(pos);
             }
             // Return soundscape to default
             else
             {
+                connectedToCorner = false;
                 GameManager.Instance.FadeOutSpeaker();
                 //StartCoroutine(GameManager.Instance.FadeOut());
                 //GameManager.speaker.Stop();
@@ -58,13 +65,14 @@ public class PlayerSoundscape : MonoBehaviour
             // bottom
             if (pos.y < yMin)
             {
-                GameManager.Instance.PlayAnswer(testBasGauche);
+                if (CheckDistance(bottomLeft)) ConnectAnswer(testBasGauche);
             }
             // top
             else if (pos.y > threshold)
             {
-                GameManager.Instance.PlayAnswer(testHautGauche);
+                if (CheckDistance(topLeft)) ConnectAnswer(testHautGauche);
             }
+            else connectedToCorner = false;
         }
         // right
         else if (pos.x > threshold)
@@ -72,21 +80,40 @@ public class PlayerSoundscape : MonoBehaviour
             // bottom
             if (pos.y < yMin)
             {
-                GameManager.Instance.PlayAnswer(testBasDroite);
+                if (CheckDistance(bottomRight)) ConnectAnswer(testBasDroite);
             }
             // top
             else if (pos.y > threshold)
             {
-                GameManager.Instance.PlayAnswer(testHautDroite);
+                if (CheckDistance(topRight)) ConnectAnswer(testHautDroite);
             }
+            else connectedToCorner = false;
         }
+        else
+        {
+            connectedToCorner = false;
+            GameManager.Instance.FadeOutSpeaker();
+        }
+    }
+
+    bool CheckDistance(Vector2 corner)
+    {
+        float d = Vector3.Distance(corner, Input.mousePosition) / Screen.width;
+        Debug.Log("Mouse distance from corner: " + d);
+        return (d < 0.3f);
     }
 
     void UpdateSoundVolume(Vector2 pos)
     {
         float d = Vector3.Distance(center, Input.mousePosition) / ((float)Screen.width /2f);
-        Debug.Log("Mouse distance from center: " + d);
+        //Debug.Log("Mouse distance from center: " + d);
         GameManager.Instance.UpdateAnswerSound(Mathf.Min(d, 1));
+    }
+
+    void ConnectAnswer(AudioClip clip)
+    {
+        connectedToCorner = true;
+        GameManager.Instance.PlayAnswer(clip);
     }
 
 }
