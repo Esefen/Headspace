@@ -66,7 +66,7 @@ public class GameManager : MonoBehaviour
         }
         //iTween.AudioTo(gameObject, iTween.Hash(""));
     }
-
+    /*
     public IEnumerator FadeOut()
     {
         while (speaker.volume >= 0)
@@ -80,4 +80,5 @@ public class GameManager : MonoBehaviour
     {
         speaker.volume -= 0.5f * Time.deltaTime;
     }
+    */
 }

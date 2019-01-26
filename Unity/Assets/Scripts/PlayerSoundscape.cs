@@ -6,7 +6,7 @@ public class PlayerSoundscape : MonoBehaviour
 {
     const float threshold = 0.65f;
     float xMin, yMin;
-    Vector2 center, topLeft, topRight, bottomLeft, bottomRight;
+    Vector2 center, topLeft, topCenter, topRight, bottomLeft, bottomRight;
     bool connectedToCorner = false;
 
     Question currentQuestion;
@@ -23,6 +23,7 @@ public class PlayerSoundscape : MonoBehaviour
 
         center = new Vector2(Screen.width / 2, Screen.height / 2);
         topLeft = new Vector2(0, Screen.height);
+        topCenter = new Vector2(Screen.width / 2, Screen.height);
         topRight = new Vector2(Screen.width, Screen.height);
         bottomLeft = new Vector2(0, 0);
         bottomRight = new Vector2(Screen.width, 0);
@@ -31,7 +32,7 @@ public class PlayerSoundscape : MonoBehaviour
         GameManager.gameState = AppState.Answer;
 
         currentQuestion = new Question();
-        currentQuestion.possibleAnswers = AnswerNumber.Four;
+        currentQuestion.possibleAnswers = AnswerNumber.Three;
         currentQuestion.answers = new AudioClip[4];
         currentQuestion.answers[0] = testHautGauche;
         currentQuestion.answers[1] = testHautDroite;
@@ -68,9 +69,57 @@ public class PlayerSoundscape : MonoBehaviour
     {
         switch(currentQuestion.possibleAnswers)
         {
-            case AnswerNumber.Two:
-            case AnswerNumber.Three:
+            case AnswerNumber.Two: QuestionTwoAnswers(pos); break;
+            case AnswerNumber.Three: QuestionThreeAnswers(pos); break;
             case AnswerNumber.Four: QuestionFourAnswers(pos); break;
+        }
+    }
+
+    void QuestionTwoAnswers(Vector2 pos)
+    {
+        if (pos.x < xMin)
+        {
+            ConnectAnswer(currentQuestion.answers[0]);
+        }
+        // right
+        else if (pos.x > threshold)
+        {
+            ConnectAnswer(currentQuestion.answers[1]);
+        }
+        else
+        {
+            connectedToCorner = false;
+            GameManager.Instance.FadeOutSpeaker();
+        }
+    }
+
+    void QuestionThreeAnswers(Vector2 pos)
+    {
+        if (CheckDistance(topCenter)) ConnectAnswer(currentQuestion.answers[0]);
+        // left
+        else if (pos.x < xMin)
+        {
+            // bottom
+            if (pos.y < yMin)
+            {
+                if (CheckDistance(bottomLeft)) ConnectAnswer(currentQuestion.answers[1]);
+            }
+            else connectedToCorner = false;
+        }
+        // right
+        else if (pos.x > threshold)
+        {
+            // bottom
+            if (pos.y < yMin)
+            {
+                if (CheckDistance(bottomRight)) ConnectAnswer(currentQuestion.answers[2]);
+            }
+            else connectedToCorner = false;
+        }
+        else
+        {
+            connectedToCorner = false;
+            GameManager.Instance.FadeOutSpeaker();
         }
     }
 
@@ -118,7 +167,7 @@ public class PlayerSoundscape : MonoBehaviour
     bool CheckDistance(Vector2 corner)
     {
         float d = Vector3.Distance(corner, Input.mousePosition) / Screen.width;
-        Debug.Log("Mouse distance from corner: " + d);
+        //Debug.Log("Mouse distance from corner: " + d);
         return (d < 0.3f);
     }
 
