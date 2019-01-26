@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public enum AppState {Menu, Question, Answer, Transition};
+public enum AnswerNumber {Two, Three, Four};
 
 public struct Question
 {
+    public AnswerNumber possibleAnswers;
     public AudioClip intro;
     public AudioClip[] answers;
 }
@@ -33,12 +35,19 @@ public class GameManager : MonoBehaviour
 
     public void PlayAnswer(AudioClip answer)
     {
-        if (!speaker.isPlaying || speaker.clip != answer)
+        if (!speaker.isPlaying)
         {
-            StopAllCoroutines();
-            //speaker.volume = 1;
             speaker.clip = answer;
             speaker.Play();
+        }
+        else if (speaker.clip != answer)
+        {
+            if (speaker.volume != 0) iTween.AudioTo(gameObject, 0, 1, 0.15f);
+            else
+            {
+                speaker.clip = answer;
+                speaker.Play();
+            }
         }
     }
 
