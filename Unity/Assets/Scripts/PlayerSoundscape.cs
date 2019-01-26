@@ -49,18 +49,13 @@ public class PlayerSoundscape : MonoBehaviour
             if (Input.GetMouseButton(0))
             {
                 Vector2 pos = new Vector2(Input.mousePosition.x / Screen.width, Input.mousePosition.y / Screen.height);
+                //Debug.Log("Mouse Position: " + Input.mousePosition.x + ";" + Input.mousePosition.y);
+                //Debug.Log("Mouse Position: " + pos.x + ";" + pos.y);
                 UpdateInteractiveSoundscape(pos);
-                if (connectedToCorner)
-                    UpdateSoundVolume(pos);
+                if (connectedToCorner) UpdateSoundVolume(pos);
             }
             // Return soundscape to default
-            else
-            {
-                connectedToCorner = false;
-                GameManager.Instance.FadeOutSpeaker();
-                //StartCoroutine(GameManager.Instance.FadeOut());
-                //GameManager.speaker.Stop();
-            }
+            else DisconnectAnswer();
         }
     }
 
@@ -86,15 +81,12 @@ public class PlayerSoundscape : MonoBehaviour
         {
             ConnectAnswer(currentQuestion.answers[1]);
         }
-        else
-        {
-            connectedToCorner = false;
-            GameManager.Instance.FadeOutSpeaker();
-        }
+        else DisconnectAnswer();
     }
 
     void QuestionThreeAnswers(Vector2 pos)
     {
+        // center top
         if (CheckDistance(topCenter)) ConnectAnswer(currentQuestion.answers[0]);
         // left
         else if (pos.x < xMin)
@@ -116,17 +108,11 @@ public class PlayerSoundscape : MonoBehaviour
             }
             else connectedToCorner = false;
         }
-        else
-        {
-            connectedToCorner = false;
-            GameManager.Instance.FadeOutSpeaker();
-        }
+        else DisconnectAnswer();
     }
 
     void QuestionFourAnswers(Vector2 pos)
     {
-        //Debug.Log("Mouse Position: " + Input.mousePosition.x + ";" + Input.mousePosition.y);
-        //Debug.Log("Mouse Position: " + pos.x + ";" + pos.y);
         // left
         if (pos.x < xMin)
         {
@@ -157,11 +143,7 @@ public class PlayerSoundscape : MonoBehaviour
             }
             else connectedToCorner = false;
         }
-        else
-        {
-            connectedToCorner = false;
-            GameManager.Instance.FadeOutSpeaker();
-        }
+        else DisconnectAnswer();
     }
 
     bool CheckDistance(Vector2 corner)
@@ -182,6 +164,12 @@ public class PlayerSoundscape : MonoBehaviour
     {
         connectedToCorner = true;
         GameManager.Instance.PlayAnswer(clip);
+    }
+
+    void DisconnectAnswer()
+    {
+        connectedToCorner = false;
+        GameManager.Instance.FadeOutSpeaker();
     }
 
 }
