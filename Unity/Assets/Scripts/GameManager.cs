@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour
     public static AudioSource speaker;
     public static AppState gameState = AppState.Menu;
     public Image fade;
-    public Button skipButton;
+    public Button skipButton, repeatButton;
     public GameObject menuPanel, gamePanel, creditsPanel;
 
     public List<Question> questionLibrary = new List<Question>();
@@ -130,6 +130,7 @@ public class GameManager : MonoBehaviour
     void BeginExploration()
     {
         gameState = AppState.Answer;
+        repeatButton.interactable = true;
     }
 
     public void ChooseAnswer()
@@ -141,6 +142,8 @@ public class GameManager : MonoBehaviour
         speaker.clip = currentQuestion.answers[chosenAnswerIndex];
         speaker.Play();
         Invoke("DisplaySkipIcon", Mathf.Min (5, speaker.clip.length));
+        StartCoroutine(SampleHasEnded());
+        //Invoke("SampleHasEnded", speaker.clip.length);
         iTween.ValueTo(gameObject, iTween.Hash("from", 0, "to", 1, "time", transitionFadeOut, "onupdate", "FadeTransition", "easetype", "easeInCubic"));
         questionsAnswered++;
     }
@@ -151,6 +154,12 @@ public class GameManager : MonoBehaviour
         skipButton.GetComponent<Animator>().SetBool("OnOff", true);
     }
 
+    IEnumerator SampleHasEnded()
+    {
+        yield return new WaitForSeconds(speaker.clip.length);
+        if (skipButton.interactable) SkipAnswer();
+    }
+
     public void SkipAnswer()
     {
         skipButton.GetComponent<Animator>().SetBool("OnOff", false);
@@ -159,6 +168,7 @@ public class GameManager : MonoBehaviour
 
     void EndTransition()
     {
+        StopAllCoroutines();
         //Debug.Log("EndTransition");
         iTween.AudioTo(gameObject, 0, 1, transitionFadeIn);
         Invoke("StopMutedClip", transitionFadeIn);
@@ -171,7 +181,7 @@ public class GameManager : MonoBehaviour
         {
             gamePanel.SetActive(false);
             creditsPanel.SetActive(true);
-            iTween.ValueTo(gameObject, iTween.Hash("from", 1, "to", 0, "time", transitionFadeIn, "onupdate", "FadeTransition", "easetype", "easeInCubic", "oncomplete", "PlayFinalMix"));
+            iTween.ValueTo(gameObject, iTween.Hash("from", 1, "to", 0, "time", transitionFadeIn, "onupdate", "FadeTransition", "easetype", "easeInCubic", "oncomplete", "PlayCumulatedMix"));
             gameState = AppState.Credits;
         }
     }
@@ -189,7 +199,7 @@ public class GameManager : MonoBehaviour
         speaker.Stop();
     }
 
-    void PlayFinalMix()
+    void PlayCumulatedMix()
     {
         speaker.volume = 1;
         mixer = new GameObject("Mixer");
@@ -201,7 +211,6 @@ public class GameManager : MonoBehaviour
             a.clip = c;
             a.loop = true;
             a.Play();
-            //speaker.PlayOneShot(c, 1);
         }
     }
 
@@ -217,5 +226,10 @@ public class GameManager : MonoBehaviour
         menuPanel.SetActive(true);
         gameState = AppState.Menu;
         iTween.ValueTo(gameObject, iTween.Hash("from", 1, "to", 0, "time", transitionFadeIn, "onupdate", "FadeTransition", "easetype", "easeInCubic"));
+    }
+
+    public void RepeatIntro()
+    {
+        gameState = AppState.Question;
     }
 }

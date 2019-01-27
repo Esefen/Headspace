@@ -34,10 +34,10 @@ public class PlayerSoundscape : MonoBehaviour
     void Update()
     {
         // Set question-relevant parameters
-        if (GameManager.gameState == AppState.Question)
-        {
-            //SetCurrentQuestionIcons(true);
-        }
+        //if (GameManager.gameState == AppState.Question)
+        //{
+        //    //SetCurrentQuestionIcons(true);
+        //}
         // Only active in answer mode
         if (GameManager.gameState == AppState.Answer)
         {
