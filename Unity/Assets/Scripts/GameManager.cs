@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public enum AppState {Menu, Question, Answer, Transition};
+public enum AppState {Menu, Question, Answer, Transition, Credits};
 
 public class GameManager : MonoBehaviour
 {
@@ -15,10 +15,13 @@ public class GameManager : MonoBehaviour
 
     public List<Question> questionPool = new List<Question>();
     public static Question currentQuestion;
+    public int maxQuestions = 5;
+    int questionsAnswered = 0;
 
     bool fadeOut = false;
     public float transitionFadeOut = 3f;
     public float transitionFadeIn = 1.5f;
+    int chosenAnswerIndex;
 
     void Awake()
     {
@@ -50,7 +53,7 @@ public class GameManager : MonoBehaviour
         gameState = AppState.Question;
     }
 
-    void SetQuestion()
+    void SetNewQuestion()
     {
         int index = GetRandomQuestionIndex();
         currentQuestion = questionPool[index];
@@ -64,6 +67,7 @@ public class GameManager : MonoBehaviour
 
     public void PreviewAnswer(int index)
     {
+        chosenAnswerIndex = index;
         PreviewAnswer(currentQuestion.previewAnswers[index]);
     }
 
@@ -116,6 +120,30 @@ public class GameManager : MonoBehaviour
     void BeginExploration()
     {
         gameState = AppState.Answer;
+    }
+
+    public void ChooseAnswer()
+    {
+        gameState = AppState.Transition;
+        speaker.clip = currentQuestion.answers[chosenAnswerIndex];
+        speaker.Play();
+        Invoke("GoToNextQuestion", speaker.clip.length);
+        iTween.ValueTo(gameObject, iTween.Hash("from", 0, "to", 1, "time", transitionFadeOut, "onupdate", "FadeTransition", "easetype", "easeInCubic"));
+        questionsAnswered++;
+    }
+
+    void GoToNextQuestion()
+    {
+        if (questionsAnswered < maxQuestions)
+        {
+            iTween.ValueTo(gameObject, iTween.Hash("from", 1, "to", 0, "time", transitionFadeIn, "onupdate", "FadeTransition", "easetype", "easeInCubic"));
+            SetNewQuestion();
+            gameState = AppState.Question;
+        }
+        else // display credits
+        {
+            gameState = AppState.Credits;
+        }
     }
 
 }
