@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
 
     public List<Question> questionLibrary = new List<Question>();
     List<Question> questionPool = new List<Question>();
+    List<AudioClip> mix = new List<AudioClip>();
     public static Question currentQuestion;
     public int maxQuestions = 5;
     int questionsAnswered = 0;
@@ -24,6 +25,8 @@ public class GameManager : MonoBehaviour
     public float transitionFadeIn = 1.5f;
     int chosenAnswerIndex;
 
+    GameObject mixer;
+
     void Awake()
     {
         Instance = this;
@@ -32,6 +35,7 @@ public class GameManager : MonoBehaviour
 
     public void LaunchGame()
     {
+        mix.Clear();
         questionsAnswered = 0;
         questionPool.AddRange(questionLibrary);
         // Fade out
@@ -130,6 +134,7 @@ public class GameManager : MonoBehaviour
     public void ChooseAnswer()
     {
         //Debug.Log("ChooseAnswer");
+        mix.Add(currentQuestion.answers[chosenAnswerIndex]);
         gameState = AppState.Transition;
         speaker.volume = 1;
         speaker.clip = currentQuestion.answers[chosenAnswerIndex];
@@ -153,7 +158,7 @@ public class GameManager : MonoBehaviour
         {
             gamePanel.SetActive(false);
             creditsPanel.SetActive(true);
-            iTween.ValueTo(gameObject, iTween.Hash("from", 1, "to", 0, "time", transitionFadeIn, "onupdate", "FadeTransition", "easetype", "easeInCubic"));
+            iTween.ValueTo(gameObject, iTween.Hash("from", 1, "to", 0, "time", transitionFadeIn, "onupdate", "FadeTransition", "easetype", "easeInCubic", "oncomplete", "PlayFinalMix"));
             gameState = AppState.Credits;
         }
     }
@@ -171,8 +176,25 @@ public class GameManager : MonoBehaviour
         speaker.Stop();
     }
 
+    void PlayFinalMix()
+    {
+        speaker.volume = 1;
+        mixer = new GameObject("Mixer");
+        foreach (AudioClip c in mix)
+        {
+            GameObject tmp = new GameObject("Mix");
+            tmp.transform.SetParent(mixer.transform);
+            AudioSource a = tmp.AddComponent<AudioSource>();
+            a.clip = c;
+            a.loop = true;
+            a.Play();
+            //speaker.PlayOneShot(c, 1);
+        }
+    }
+
     public void ReturnToMainMenu()
     {
+        Destroy(mixer);
         iTween.ValueTo(gameObject, iTween.Hash("from", 0, "to", 1, "time", transitionFadeOut, "onupdate", "FadeTransition", "easetype", "easeInCubic", "oncomplete", "ReactivateMainMenu"));
     }
 
