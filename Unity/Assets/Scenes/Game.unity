@@ -520,7 +520,11 @@ MonoBehaviour:
   menuPanel: {fileID: 438490451}
   gamePanel: {fileID: 165193762}
   questionPool:
-  - {fileID: 4188864221882413195, guid: 4d7af7a239f56ca4892c62e66598fcbb, type: 3}
+  - {fileID: 4188864221882413195, guid: b09445bc8882fee478de03ed9a28b951, type: 3}
+  - {fileID: 4188864221882413195, guid: 11e82b78923c10f418d2b0fd17e9500c, type: 3}
+  - {fileID: 4188864221882413195, guid: a6be063a4b75fe544a070294cd99c996, type: 3}
+  - {fileID: 4188864221882413195, guid: c64c862cece2b3b40bc4cb9f2a582860, type: 3}
+  maxQuestions: 4
   transitionFadeOut: 3
   transitionFadeIn: 1.5
 --- !u!4 &1310954402

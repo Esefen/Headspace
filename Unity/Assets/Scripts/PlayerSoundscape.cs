@@ -158,7 +158,7 @@ public class PlayerSoundscape : MonoBehaviour
 
     void ResetCorner()
     {
-        Debug.Log("Corner reset");
+        //Debug.Log("Corner reset");
         cornerConnected = Vector2.negativeInfinity;
     }
 
@@ -175,7 +175,6 @@ public class PlayerSoundscape : MonoBehaviour
 
     void ChooseAnswer()
     {
-        Debug.LogError("GOOOOOO " + cornerConnected);
         GameManager.Instance.ChooseAnswer();
     }
 

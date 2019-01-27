@@ -62,7 +62,7 @@ public class GameManager : MonoBehaviour
 
     int GetRandomQuestionIndex()
     {
-        return Mathf.FloorToInt(Random.value * questionPool.Count - 1);
+        return Mathf.FloorToInt(Random.value * questionPool.Count);
     }
 
     public void PreviewAnswer(int index)
@@ -111,6 +111,8 @@ public class GameManager : MonoBehaviour
         {
             if (!speaker.isPlaying)
             {
+                Debug.Log("Play question !");
+                speaker.volume = 1;
                 speaker.PlayOneShot(currentQuestion.intro);
                 Invoke("BeginExploration", currentQuestion.intro.length);
             }
@@ -124,26 +126,42 @@ public class GameManager : MonoBehaviour
 
     public void ChooseAnswer()
     {
+        Debug.Log("ChooseAnswer");
         gameState = AppState.Transition;
+        speaker.volume = 1;
         speaker.clip = currentQuestion.answers[chosenAnswerIndex];
         speaker.Play();
-        Invoke("GoToNextQuestion", speaker.clip.length);
+        Invoke("EndTransition", Mathf.Min (10, speaker.clip.length));
         iTween.ValueTo(gameObject, iTween.Hash("from", 0, "to", 1, "time", transitionFadeOut, "onupdate", "FadeTransition", "easetype", "easeInCubic"));
         questionsAnswered++;
     }
 
-    void GoToNextQuestion()
+    void EndTransition()
     {
+        Debug.Log("EndTransition");
         if (questionsAnswered < maxQuestions)
         {
-            iTween.ValueTo(gameObject, iTween.Hash("from", 1, "to", 0, "time", transitionFadeIn, "onupdate", "FadeTransition", "easetype", "easeInCubic"));
-            SetNewQuestion();
-            gameState = AppState.Question;
+            iTween.AudioTo(gameObject, 0, 1, transitionFadeIn);
+            Invoke("StopMutedClip", transitionFadeIn);
+            Invoke("GoToNextQuestion", transitionFadeIn + 1);
         }
         else // display credits
         {
             gameState = AppState.Credits;
         }
+    }
+
+    void GoToNextQuestion()
+    {
+        Debug.Log("GoToNextQuestion");
+        iTween.ValueTo(gameObject, iTween.Hash("from", 1, "to", 0, "time", transitionFadeIn, "onupdate", "FadeTransition", "easetype", "easeInCubic"));
+        SetNewQuestion();
+        gameState = AppState.Question;
+    }
+
+    void StopMutedClip()
+    {
+        speaker.Stop();
     }
 
 }
