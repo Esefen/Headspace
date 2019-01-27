@@ -129,7 +129,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &165193763
 RectTransform:
   m_ObjectHideFlags: 0
@@ -379,7 +379,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &438490452
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6434,6 +6434,14 @@ MonoBehaviour:
   fade: {fileID: 1629189741}
   menuPanel: {fileID: 438490451}
   gamePanel: {fileID: 165193762}
+  questionPool:
+  - {fileID: 4188864221882413195, guid: b09445bc8882fee478de03ed9a28b951, type: 3}
+  - {fileID: 4188864221882413195, guid: 11e82b78923c10f418d2b0fd17e9500c, type: 3}
+  - {fileID: 4188864221882413195, guid: a6be063a4b75fe544a070294cd99c996, type: 3}
+  - {fileID: 4188864221882413195, guid: c64c862cece2b3b40bc4cb9f2a582860, type: 3}
+  maxQuestions: 4
+  transitionFadeOut: 3
+  transitionFadeIn: 1.5
 --- !u!4 &1310954402
 Transform:
   m_ObjectHideFlags: 0
@@ -6827,10 +6835,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a8276fcc40c0584d87e13f9fad7b781, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testHautGauche: {fileID: 8300000, guid: 5a3a2bd68ea9308489b34cd2a2d8dc56, type: 3}
-  testHautDroite: {fileID: 8300000, guid: 35e1fdbc1132dea42a588175272953db, type: 3}
-  testBasGauche: {fileID: 8300000, guid: d0b16c81d484179408b7e8f59aaa97bb, type: 3}
-  testBasDroite: {fileID: 8300000, guid: fd05f5f7a0421c4469e5f85ca1de6f0b, type: 3}
+  leftIcon: {fileID: 350964696}
+  rightIcon: {fileID: 1511523712}
+  topLeftIcon: {fileID: 782166982}
+  topCenterIcon: {fileID: 588374816}
+  topRightIcon: {fileID: 1105674395}
+  bottomLeftIcon: {fileID: 1024818884}
+  bottomRightIcon: {fileID: 1423376886}
+  nopeIcon: {fileID: 824625444}
 --- !u!4 &1475305268
 Transform:
   m_ObjectHideFlags: 0
@@ -11967,7 +11979,7 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
+  m_Transition: 0
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
@@ -11992,6 +12004,17 @@ MonoBehaviour:
       - m_Target: {fileID: 1310954401}
         m_MethodName: LaunchGame
         m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1851317128}
+        m_MethodName: set_interactable
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine

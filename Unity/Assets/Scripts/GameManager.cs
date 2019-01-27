@@ -111,7 +111,7 @@ public class GameManager : MonoBehaviour
         {
             if (!speaker.isPlaying)
             {
-                Debug.Log("Play question !");
+                //Debug.Log("Play question !");
                 speaker.volume = 1;
                 speaker.PlayOneShot(currentQuestion.intro);
                 Invoke("BeginExploration", currentQuestion.intro.length);
@@ -126,7 +126,7 @@ public class GameManager : MonoBehaviour
 
     public void ChooseAnswer()
     {
-        Debug.Log("ChooseAnswer");
+        //Debug.Log("ChooseAnswer");
         gameState = AppState.Transition;
         speaker.volume = 1;
         speaker.clip = currentQuestion.answers[chosenAnswerIndex];
@@ -138,7 +138,7 @@ public class GameManager : MonoBehaviour
 
     void EndTransition()
     {
-        Debug.Log("EndTransition");
+        //Debug.Log("EndTransition");
         if (questionsAnswered < maxQuestions)
         {
             iTween.AudioTo(gameObject, 0, 1, transitionFadeIn);
@@ -153,7 +153,7 @@ public class GameManager : MonoBehaviour
 
     void GoToNextQuestion()
     {
-        Debug.Log("GoToNextQuestion");
+        //Debug.Log("GoToNextQuestion");
         iTween.ValueTo(gameObject, iTween.Hash("from", 1, "to", 0, "time", transitionFadeIn, "onupdate", "FadeTransition", "easetype", "easeInCubic"));
         SetNewQuestion();
         gameState = AppState.Question;

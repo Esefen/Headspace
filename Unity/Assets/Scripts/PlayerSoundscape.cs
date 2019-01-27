@@ -1,13 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerSoundscape : MonoBehaviour
 {
     const float threshold = 0.65f;
     float xMin, yMin;
     Vector2 left, right, center, topLeft, topCenter, topRight, bottomLeft, bottomRight;
-    Vector2 cornerConnected = Vector2.negativeInfinity;
+    public Animator leftIcon, rightIcon, topLeftIcon, topCenterIcon, topRightIcon, bottomLeftIcon, bottomRightIcon;
+    Animator cornerConnected = null;
+    public Image nopeIcon;
 
     // Start is called before the first frame update
     void Start()
@@ -23,11 +26,18 @@ public class PlayerSoundscape : MonoBehaviour
         topRight = new Vector2(Screen.width, Screen.height);
         bottomLeft = new Vector2(0, 0);
         bottomRight = new Vector2(Screen.width, 0);
+
+        nopeIcon.color = new Color(1, 1, 1, 0);
     }
 
     // Update is called once per frame
     void Update()
     {
+        // Set question-relevant parameters
+        if (GameManager.gameState == AppState.Question)
+        {
+            SetCurrentQuestionIcons(true);
+        }
         // Only active in answer mode
         if (GameManager.gameState == AppState.Answer)
         {
@@ -41,7 +51,7 @@ public class PlayerSoundscape : MonoBehaviour
                 //Debug.Log("Mouse Position: " + Input.mousePosition.x + ";" + Input.mousePosition.y);
                 //Debug.Log("Mouse Position: " + pos.x + ";" + pos.y);
                 UpdateInteractiveSoundscape(pos);
-                if (cornerConnected != Vector2.negativeInfinity) UpdateSoundVolume(pos);
+                if (AnswerSelected()) UpdateSoundVolume(pos);
             }
             // Return soundscape to default
             else DisconnectAnswer();
@@ -56,6 +66,7 @@ public class PlayerSoundscape : MonoBehaviour
             case AnswerNumber.Two: QuestionTwoAnswers(pos); break;
             case AnswerNumber.Three: QuestionThreeAnswers(pos); break;
             case AnswerNumber.Four: QuestionFourAnswers(pos); break;
+            default: throw new UnityException();
         }
     }
 
@@ -64,12 +75,12 @@ public class PlayerSoundscape : MonoBehaviour
         // left
         if (pos.x < xMin)
         {
-            ConnectAnswer(left, 0);
+            ConnectAnswer(leftIcon, 0);
         }
         // right
         else if (pos.x > threshold)
         {
-            ConnectAnswer(right, 1);
+            ConnectAnswer(rightIcon, 1);
         }
         else DisconnectAnswer();
     }
@@ -77,14 +88,14 @@ public class PlayerSoundscape : MonoBehaviour
     void QuestionThreeAnswers(Vector2 pos)
     {
         // center top
-        if (CheckDistance(topCenter)) ConnectAnswer(topCenter, 0);
+        if (CheckDistance(topCenter)) ConnectAnswer(topCenterIcon, 0);
         // left
         else if (pos.x < xMin)
         {
             // bottom
             if (pos.y < yMin)
             {
-                if (CheckDistance(bottomLeft)) ConnectAnswer(bottomLeft, 1);
+                if (CheckDistance(bottomLeft)) ConnectAnswer(bottomLeftIcon, 1);
             }
             else ResetCorner();
         }
@@ -94,7 +105,7 @@ public class PlayerSoundscape : MonoBehaviour
             // bottom
             if (pos.y < yMin)
             {
-                if (CheckDistance(bottomRight)) ConnectAnswer(bottomRight, 2);
+                if (CheckDistance(bottomRight)) ConnectAnswer(bottomRightIcon, 2);
             }
             else ResetCorner();
         }
@@ -109,12 +120,12 @@ public class PlayerSoundscape : MonoBehaviour
             // bottom
             if (pos.y < yMin)
             {
-                if (CheckDistance(bottomLeft)) ConnectAnswer(bottomLeft, 2);
+                if (CheckDistance(bottomLeft)) ConnectAnswer(bottomLeftIcon, 2);
             }
             // top
             else if (pos.y > threshold)
             {
-                if (CheckDistance(topLeft)) ConnectAnswer(topLeft, 0);
+                if (CheckDistance(topLeft)) ConnectAnswer(topLeftIcon, 0);
             }
             else ResetCorner();
         }
@@ -124,12 +135,12 @@ public class PlayerSoundscape : MonoBehaviour
             // bottom
             if (pos.y < yMin)
             {
-                if (CheckDistance(bottomRight)) ConnectAnswer(bottomRight, 3);
+                if (CheckDistance(bottomRight)) ConnectAnswer(bottomRightIcon, 3);
             }
             // top
             else if (pos.y > threshold)
             {
-                if (CheckDistance(topRight)) ConnectAnswer(topRight, 1);
+                if (CheckDistance(topRight)) ConnectAnswer(topRightIcon, 1);
             }
             else ResetCorner();
         }
@@ -150,16 +161,20 @@ public class PlayerSoundscape : MonoBehaviour
         GameManager.Instance.UpdateAnswerSound(Mathf.Min(d, 1));
     }
 
-    void ConnectAnswer(Vector2 corner, int index)
+    void ConnectAnswer(Animator corner, int index)
     {
+        IconShiftFade(0.02f);
         cornerConnected = corner;
+        cornerConnected.SetBool("SoundIsTested", true);
         GameManager.Instance.PreviewAnswer(index);
     }
 
     void ResetCorner()
     {
+        IconShiftFade(-0.03f);
         //Debug.Log("Corner reset");
-        cornerConnected = Vector2.negativeInfinity;
+        if (cornerConnected != null) cornerConnected.SetBool("SoundIsTested", false);
+        cornerConnected = null;
     }
 
     void DisconnectAnswer()
@@ -170,12 +185,50 @@ public class PlayerSoundscape : MonoBehaviour
 
     bool AnswerSelected()
     {
-        return Vector2.Distance(cornerConnected, Vector2.negativeInfinity) > 10;
+        return cornerConnected != null;
     }
 
     void ChooseAnswer()
     {
+        IconShiftFade(-0.09f);
+        cornerConnected.SetBool("SoundIsChosen", true);
         GameManager.Instance.ChooseAnswer();
+        Invoke("ResetSpriteAnimations", 2.5f);
     }
 
+    void IconShiftFade(float alphaMod)
+    {
+        nopeIcon.color = new Color(1, 1, 1, Mathf.Clamp(nopeIcon.color.a + alphaMod, 0, 1));
+    }
+
+    void ResetSpriteAnimations()
+    {
+        cornerConnected.SetBool("SoundIsTested", false);
+        cornerConnected.SetBool("SoundIsChosen", false);
+        cornerConnected = null;
+        IconShiftFade(-1);
+        SetCurrentQuestionIcons(false);
+    }
+
+    void SetCurrentQuestionIcons(bool enable)
+    {
+        switch (GameManager.currentQuestion.possibleAnswers)
+        {
+            case AnswerNumber.Two:
+                leftIcon.SetBool("QuestionAsked", enable);
+                rightIcon.SetBool("QuestionAsked", enable);
+                break;
+            case AnswerNumber.Three:
+                topCenterIcon.SetBool("QuestionAsked", enable);
+                bottomLeftIcon.SetBool("QuestionAsked", enable);
+                bottomRightIcon.SetBool("QuestionAsked", enable);
+                break;
+            case AnswerNumber.Four:
+                topLeftIcon.SetBool("QuestionAsked", enable);
+                topRightIcon.SetBool("QuestionAsked", enable);
+                bottomLeftIcon.SetBool("QuestionAsked", enable);
+                bottomRightIcon.SetBool("QuestionAsked", enable);
+                break;
+        }
+    }
 }
