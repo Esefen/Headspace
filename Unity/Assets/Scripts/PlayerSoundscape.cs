@@ -10,7 +10,7 @@ public class PlayerSoundscape : MonoBehaviour
     Vector2 left, right, center, topLeft, topCenter, topRight, bottomLeft, bottomRight;
     public Animator leftIcon, rightIcon, topLeftIcon, topCenterIcon, topRightIcon, bottomLeftIcon, bottomRightIcon;
     Animator cornerConnected = null;
-    public Image nopeIcon;
+    public Image nopeIcon, focusIcon;
 
     // Start is called before the first frame update
     void Start()
@@ -36,7 +36,7 @@ public class PlayerSoundscape : MonoBehaviour
         // Set question-relevant parameters
         if (GameManager.gameState == AppState.Question)
         {
-            SetCurrentQuestionIcons(true);
+            //SetCurrentQuestionIcons(true);
         }
         // Only active in answer mode
         if (GameManager.gameState == AppState.Answer)
@@ -47,6 +47,7 @@ public class PlayerSoundscape : MonoBehaviour
             }
             else if (Input.GetMouseButton(0))
             {
+                SetCurrentQuestionIcons(true);
                 Vector2 pos = new Vector2(Input.mousePosition.x / Screen.width, Input.mousePosition.y / Screen.height);
                 //Debug.Log("Mouse Position: " + Input.mousePosition.x + ";" + Input.mousePosition.y);
                 //Debug.Log("Mouse Position: " + pos.x + ";" + pos.y);
