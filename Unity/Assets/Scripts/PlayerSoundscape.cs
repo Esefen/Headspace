@@ -44,9 +44,15 @@ public class PlayerSoundscape : MonoBehaviour
             if (Input.GetMouseButtonUp(0))
             {
                 if (AnswerSelected()) ChooseAnswer();
+                else
+                {
+                    SetCurrentQuestionIcons(false);
+                    focusIcon.GetComponent<Animator>().SetBool("FingerDown", false);
+                }
             }
             else if (Input.GetMouseButton(0))
             {
+                focusIcon.GetComponent<Animator>().SetBool("FingerDown", true);
                 SetCurrentQuestionIcons(true);
                 Vector2 pos = new Vector2(Input.mousePosition.x / Screen.width, Input.mousePosition.y / Screen.height);
                 //Debug.Log("Mouse Position: " + Input.mousePosition.x + ";" + Input.mousePosition.y);
@@ -191,7 +197,9 @@ public class PlayerSoundscape : MonoBehaviour
 
     void ChooseAnswer()
     {
-        IconShiftFade(-0.09f);
+        //IconShiftFade(-0.09f);
+        IconShiftFade(-1);
+        focusIcon.GetComponent<Animator>().SetBool("FingerDown", false);
         cornerConnected.SetBool("SoundIsChosen", true);
         GameManager.Instance.ChooseAnswer();
         Invoke("ResetSpriteAnimations", 2.5f);
@@ -207,7 +215,7 @@ public class PlayerSoundscape : MonoBehaviour
         cornerConnected.SetBool("SoundIsTested", false);
         cornerConnected.SetBool("SoundIsChosen", false);
         cornerConnected = null;
-        IconShiftFade(-1);
+        //IconShiftFade(-1);
         SetCurrentQuestionIcons(false);
     }
 
