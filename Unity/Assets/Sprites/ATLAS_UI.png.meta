@@ -20,6 +20,7 @@ TextureImporter:
     21300030: ATLAS_UI_Continue1
     21300032: ATLAS_UI_Continue2
     21300034: ATLAS_UI_Continue3
+    21300036: ATLAS_UI_popin
   externalObjects: {}
   serializedVersion: 7
   mipmaps:
@@ -125,8 +126,8 @@ TextureImporter:
       name: ATLAS_UI_1_Dot
       rect:
         serializedVersion: 2
-        x: 1088
-        y: 1682
+        x: 1123
+        y: 1913
         width: 35
         height: 35
       alignment: 0
@@ -457,6 +458,26 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 6ccb31a3b2a3b184db2a4d3a25f09892
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ATLAS_UI_popin
+      rect:
+        serializedVersion: 2
+        x: 853
+        y: 1387
+        width: 364
+        height: 383
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4722ad81af80178478e696dd6294dacc
       vertices: []
       indices: 
       edges: []
