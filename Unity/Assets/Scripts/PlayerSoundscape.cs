@@ -144,7 +144,7 @@ public class PlayerSoundscape : MonoBehaviour
         GameManager.Instance.UpdateAnswerSound(Mathf.Min(d, 1));
     }
 
-    void ConnectAnswer(uint index)
+    void ConnectAnswer(int index)
     {
         connectedToCorner = true;
         GameManager.Instance.PreviewAnswer(index);

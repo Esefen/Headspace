@@ -17,27 +17,19 @@ public class GameManager : MonoBehaviour
     public static Question currentQuestion;
 
     bool fadeOut = false;
+    public float transitionFadeOut = 3f;
+    public float transitionFadeIn = 1.5f;
 
     void Awake()
     {
-        Initialize();
-    }
-
-    void Initialize()
-    {
         Instance = this;
         speaker = GetComponent<AudioSource>();
-
-        // Hardcoded questions
-        //Question tmp = new Question();
-        //tmp.possibleAnswers = AnswerNumber.Two;
-        //questions.Add(tmp);
     }
 
     public void LaunchGame()
     {
         // Fade out
-        iTween.ValueTo(gameObject, iTween.Hash("from", 0, "to", 1, "time", 1, "onupdate", "FadeTransition", "easetype", "easeInCubic", "oncomplete", "StartGame"));
+        iTween.ValueTo(gameObject, iTween.Hash("from", 0, "to", 1, "time", transitionFadeOut, "onupdate", "FadeTransition", "easetype", "easeInCubic", "oncomplete", "StartGame"));
     }
 
     void FadeTransition(float newAlpha)
@@ -50,12 +42,12 @@ public class GameManager : MonoBehaviour
         menuPanel.SetActive(false);
         gamePanel.SetActive(true);
         // Fade in
-        iTween.ValueTo(gameObject, iTween.Hash("from", 1, "to", 0, "time", 1, "onupdate", "FadeTransition", "easetype", "easeInCubic"));
+        iTween.ValueTo(gameObject, iTween.Hash("from", 1, "to", 0, "time", transitionFadeIn, "onupdate", "FadeTransition", "easetype", "easeInCubic"));
 
-        gameState = AppState.Question;
         // Pick a random question
         currentQuestion = questionPool[0];
         questionPool.RemoveAt(0);
+        gameState = AppState.Question;
     }
 
     void SetQuestion()
@@ -70,10 +62,9 @@ public class GameManager : MonoBehaviour
         return Mathf.FloorToInt(Random.value * questionPool.Count - 1);
     }
 
-    public void PreviewAnswer(uint index)
+    public void PreviewAnswer(int index)
     {
-        Debug.Assert(index < 0 || index > 3, "NO!");
-        PreviewAnswer(currentQuestion.answers[index]);
+        PreviewAnswer(currentQuestion.previewAnswers[index]);
     }
 
     void PreviewAnswer(AudioClip answer)
@@ -108,6 +99,23 @@ public class GameManager : MonoBehaviour
             iTween.AudioTo(gameObject, 0, 1, 0.7f);
             //iTween.AudioTo(gameObject, iTween.Hash(""));
         }
+    }
+
+    void Update()
+    {
+        if (gameState == AppState.Question)
+        {
+            if (!speaker.isPlaying)
+            {
+                speaker.PlayOneShot(currentQuestion.intro);
+                Invoke("BeginExploration", currentQuestion.intro.length);
+            }
+        }
+    }
+
+    void BeginExploration()
+    {
+        gameState = AppState.Answer;
     }
 
 }
