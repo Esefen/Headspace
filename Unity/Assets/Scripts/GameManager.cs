@@ -11,9 +11,10 @@ public class GameManager : MonoBehaviour
     public static AudioSource speaker;
     public static AppState gameState = AppState.Menu;
     public Image fade;
-    public GameObject menuPanel, gamePanel;
+    public GameObject menuPanel, gamePanel, creditsPanel;
 
-    public List<Question> questionPool = new List<Question>();
+    public List<Question> questionLibrary = new List<Question>();
+    List<Question> questionPool = new List<Question>();
     public static Question currentQuestion;
     public int maxQuestions = 5;
     int questionsAnswered = 0;
@@ -31,6 +32,7 @@ public class GameManager : MonoBehaviour
 
     public void LaunchGame()
     {
+        questionPool.AddRange(questionLibrary);
         // Fade out
         iTween.ValueTo(gameObject, iTween.Hash("from", 0, "to", 1, "time", transitionFadeOut, "onupdate", "FadeTransition", "easetype", "easeInCubic", "oncomplete", "StartGame"));
     }
@@ -139,14 +141,18 @@ public class GameManager : MonoBehaviour
     void EndTransition()
     {
         //Debug.Log("EndTransition");
-        if (questionsAnswered < maxQuestions)
+        iTween.AudioTo(gameObject, 0, 1, transitionFadeIn);
+        Invoke("StopMutedClip", transitionFadeIn);
+
+        if (questionsAnswered < maxQuestions) // next question
         {
-            iTween.AudioTo(gameObject, 0, 1, transitionFadeIn);
-            Invoke("StopMutedClip", transitionFadeIn);
             Invoke("GoToNextQuestion", transitionFadeIn + 1);
         }
         else // display credits
         {
+            gamePanel.SetActive(false);
+            creditsPanel.SetActive(true);
+            iTween.ValueTo(gameObject, iTween.Hash("from", 1, "to", 0, "time", transitionFadeIn, "onupdate", "FadeTransition", "easetype", "easeInCubic"));
             gameState = AppState.Credits;
         }
     }
@@ -164,4 +170,16 @@ public class GameManager : MonoBehaviour
         speaker.Stop();
     }
 
+    public void ReturnToMainMenu()
+    {
+        iTween.ValueTo(gameObject, iTween.Hash("from", 0, "to", 1, "time", transitionFadeOut, "onupdate", "FadeTransition", "easetype", "easeInCubic", "oncomplete", "ReactivateMainMenu"));
+    }
+
+    void ReactivateMainMenu()
+    {
+        creditsPanel.SetActive(false);
+        menuPanel.SetActive(true);
+        gameState = AppState.Menu;
+        iTween.ValueTo(gameObject, iTween.Hash("from", 1, "to", 0, "time", transitionFadeIn, "onupdate", "FadeTransition", "easetype", "easeInCubic"));
+    }
 }
