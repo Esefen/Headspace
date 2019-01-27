@@ -4,14 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public enum AppState {Menu, Question, Answer, Transition};
-public enum AnswerNumber {Two, Three, Four};
-
-public struct Question
-{
-    public AnswerNumber possibleAnswers;
-    public AudioClip intro;
-    public AudioClip[] answers;
-}
 
 public class GameManager : MonoBehaviour
 {
@@ -21,7 +13,8 @@ public class GameManager : MonoBehaviour
     public Image fade;
     public GameObject menuPanel, gamePanel;
 
-    public Question test;
+    public List<Question> questionPool = new List<Question>();
+    public static Question currentQuestion;
 
     bool fadeOut = false;
 
@@ -36,6 +29,9 @@ public class GameManager : MonoBehaviour
         speaker = GetComponent<AudioSource>();
 
         // Hardcoded questions
+        //Question tmp = new Question();
+        //tmp.possibleAnswers = AnswerNumber.Two;
+        //questions.Add(tmp);
     }
 
     public void LaunchGame()
@@ -58,15 +54,29 @@ public class GameManager : MonoBehaviour
 
         gameState = AppState.Question;
         // Pick a random question
+        currentQuestion = questionPool[0];
+        questionPool.RemoveAt(0);
     }
 
-    // Update is called once per frame
-    void Update()
+    void SetQuestion()
     {
-        
+        int index = GetRandomQuestionIndex();
+        currentQuestion = questionPool[index];
+        questionPool.RemoveAt(index);
     }
 
-    public void PlayAnswer(AudioClip answer)
+    int GetRandomQuestionIndex()
+    {
+        return Mathf.FloorToInt(Random.value * questionPool.Count - 1);
+    }
+
+    public void PreviewAnswer(uint index)
+    {
+        Debug.Assert(index < 0 || index > 3, "NO!");
+        PreviewAnswer(currentQuestion.answers[index]);
+    }
+
+    void PreviewAnswer(AudioClip answer)
     {
         if (!speaker.isPlaying)
         {

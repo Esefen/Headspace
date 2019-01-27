@@ -9,12 +9,6 @@ public class PlayerSoundscape : MonoBehaviour
     Vector2 center, topLeft, topCenter, topRight, bottomLeft, bottomRight;
     bool connectedToCorner = false;
 
-    Question currentQuestion;
-    public AudioClip testHautGauche;
-    public AudioClip testHautDroite;
-    public AudioClip testBasGauche;
-    public AudioClip testBasDroite;
-
     // Start is called before the first frame update
     void Start()
     {
@@ -27,17 +21,6 @@ public class PlayerSoundscape : MonoBehaviour
         topRight = new Vector2(Screen.width, Screen.height);
         bottomLeft = new Vector2(0, 0);
         bottomRight = new Vector2(Screen.width, 0);
-
-        // temp
-        GameManager.gameState = AppState.Answer;
-
-        currentQuestion = new Question();
-        currentQuestion.possibleAnswers = AnswerNumber.Three;
-        currentQuestion.answers = new AudioClip[4];
-        currentQuestion.answers[0] = testHautGauche;
-        currentQuestion.answers[1] = testHautDroite;
-        currentQuestion.answers[2] = testBasGauche;
-        currentQuestion.answers[3] = testBasDroite;
     }
 
     // Update is called once per frame
@@ -62,7 +45,7 @@ public class PlayerSoundscape : MonoBehaviour
     // Modify soundscape
     void UpdateInteractiveSoundscape(Vector2 pos)
     {
-        switch(currentQuestion.possibleAnswers)
+        switch(GameManager.currentQuestion.possibleAnswers)
         {
             case AnswerNumber.Two: QuestionTwoAnswers(pos); break;
             case AnswerNumber.Three: QuestionThreeAnswers(pos); break;
@@ -72,14 +55,15 @@ public class PlayerSoundscape : MonoBehaviour
 
     void QuestionTwoAnswers(Vector2 pos)
     {
+        // left
         if (pos.x < xMin)
         {
-            ConnectAnswer(currentQuestion.answers[0]);
+            ConnectAnswer(0);
         }
         // right
         else if (pos.x > threshold)
         {
-            ConnectAnswer(currentQuestion.answers[1]);
+            ConnectAnswer(1);
         }
         else DisconnectAnswer();
     }
@@ -87,14 +71,14 @@ public class PlayerSoundscape : MonoBehaviour
     void QuestionThreeAnswers(Vector2 pos)
     {
         // center top
-        if (CheckDistance(topCenter)) ConnectAnswer(currentQuestion.answers[0]);
+        if (CheckDistance(topCenter)) ConnectAnswer(0);
         // left
         else if (pos.x < xMin)
         {
             // bottom
             if (pos.y < yMin)
             {
-                if (CheckDistance(bottomLeft)) ConnectAnswer(currentQuestion.answers[1]);
+                if (CheckDistance(bottomLeft)) ConnectAnswer(1);
             }
             else connectedToCorner = false;
         }
@@ -104,7 +88,7 @@ public class PlayerSoundscape : MonoBehaviour
             // bottom
             if (pos.y < yMin)
             {
-                if (CheckDistance(bottomRight)) ConnectAnswer(currentQuestion.answers[2]);
+                if (CheckDistance(bottomRight)) ConnectAnswer(2);
             }
             else connectedToCorner = false;
         }
@@ -119,12 +103,12 @@ public class PlayerSoundscape : MonoBehaviour
             // bottom
             if (pos.y < yMin)
             {
-                if (CheckDistance(bottomLeft)) ConnectAnswer(currentQuestion.answers[2]);
+                if (CheckDistance(bottomLeft)) ConnectAnswer(2);
             }
             // top
             else if (pos.y > threshold)
             {
-                if (CheckDistance(topLeft)) ConnectAnswer(currentQuestion.answers[0]);
+                if (CheckDistance(topLeft)) ConnectAnswer(0);
             }
             else connectedToCorner = false;
         }
@@ -134,12 +118,12 @@ public class PlayerSoundscape : MonoBehaviour
             // bottom
             if (pos.y < yMin)
             {
-                if (CheckDistance(bottomRight)) ConnectAnswer(currentQuestion.answers[3]);
+                if (CheckDistance(bottomRight)) ConnectAnswer(3);
             }
             // top
             else if (pos.y > threshold)
             {
-                if (CheckDistance(topRight)) ConnectAnswer(currentQuestion.answers[1]);
+                if (CheckDistance(topRight)) ConnectAnswer(1);
             }
             else connectedToCorner = false;
         }
@@ -160,10 +144,10 @@ public class PlayerSoundscape : MonoBehaviour
         GameManager.Instance.UpdateAnswerSound(Mathf.Min(d, 1));
     }
 
-    void ConnectAnswer(AudioClip clip)
+    void ConnectAnswer(uint index)
     {
         connectedToCorner = true;
-        GameManager.Instance.PlayAnswer(clip);
+        GameManager.Instance.PreviewAnswer(index);
     }
 
     void DisconnectAnswer()
