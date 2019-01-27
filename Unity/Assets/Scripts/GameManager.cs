@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
     public static AudioSource speaker;
     public static AppState gameState = AppState.Menu;
-    public Image fade;
+    public Image fade, skipButton;
     public GameObject menuPanel, gamePanel, creditsPanel;
 
     public List<Question> questionLibrary = new List<Question>();
@@ -139,9 +139,20 @@ public class GameManager : MonoBehaviour
         speaker.volume = 1;
         speaker.clip = currentQuestion.answers[chosenAnswerIndex];
         speaker.Play();
-        Invoke("EndTransition", Mathf.Min (10, speaker.clip.length));
+        Invoke("DisplaySkipIcon", Mathf.Min (5, speaker.clip.length));
         iTween.ValueTo(gameObject, iTween.Hash("from", 0, "to", 1, "time", transitionFadeOut, "onupdate", "FadeTransition", "easetype", "easeInCubic"));
         questionsAnswered++;
+    }
+
+    void DisplaySkipIcon()
+    {
+        skipButton.GetComponent<Animator>().SetBool("OnOff", true);
+    }
+
+    public void SkipAnswer()
+    {
+        skipButton.GetComponent<Animator>().SetBool("OnOff", false);
+        EndTransition();
     }
 
     void EndTransition()
