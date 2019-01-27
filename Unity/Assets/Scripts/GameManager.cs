@@ -32,6 +32,7 @@ public class GameManager : MonoBehaviour
 
     public void LaunchGame()
     {
+        questionsAnswered = 0;
         questionPool.AddRange(questionLibrary);
         // Fade out
         iTween.ValueTo(gameObject, iTween.Hash("from", 0, "to", 1, "time", transitionFadeOut, "onupdate", "FadeTransition", "easetype", "easeInCubic", "oncomplete", "StartGame"));
