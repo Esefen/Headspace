@@ -519,6 +519,12 @@ MonoBehaviour:
   fade: {fileID: 1629189741}
   menuPanel: {fileID: 438490451}
   gamePanel: {fileID: 165193762}
+  questionPool:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!4 &1310954402
 Transform:
   m_ObjectHideFlags: 0
@@ -737,10 +743,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a8276fcc40c0584d87e13f9fad7b781, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testHautGauche: {fileID: 8300000, guid: 5a3a2bd68ea9308489b34cd2a2d8dc56, type: 3}
-  testHautDroite: {fileID: 8300000, guid: 35e1fdbc1132dea42a588175272953db, type: 3}
-  testBasGauche: {fileID: 8300000, guid: d0b16c81d484179408b7e8f59aaa97bb, type: 3}
-  testBasDroite: {fileID: 8300000, guid: fd05f5f7a0421c4469e5f85ca1de6f0b, type: 3}
 --- !u!4 &1475305268
 Transform:
   m_ObjectHideFlags: 0
@@ -965,7 +967,7 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
+  m_Transition: 0
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
