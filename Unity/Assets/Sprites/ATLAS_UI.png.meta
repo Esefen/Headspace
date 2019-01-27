@@ -17,6 +17,9 @@ TextureImporter:
     21300024: ATLAS_UI_return3
     21300026: ATLAS_UI_play3
     21300028: ATLAS_UI_cancel
+    21300030: ATLAS_UI_Continue1
+    21300032: ATLAS_UI_Continue2
+    21300034: ATLAS_UI_Continue3
   externalObjects: {}
   serializedVersion: 7
   mipmaps:
@@ -264,7 +267,7 @@ TextureImporter:
         serializedVersion: 2
         x: 68
         y: 316
-        width: 673
+        width: 704
         height: 196
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -387,13 +390,73 @@ TextureImporter:
         width: 183
         height: 183
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
       spriteID: 6806a346bb11e7f47a498b8c0239df4a
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ATLAS_UI_Continue1
+      rect:
+        serializedVersion: 2
+        x: 1431
+        y: 931
+        width: 274
+        height: 278
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9d4ebc1ea132d034fafb60617b879579
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ATLAS_UI_Continue2
+      rect:
+        serializedVersion: 2
+        x: 1452
+        y: 666
+        width: 256
+        height: 259
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 74f963d449ff6a24193885fbe8fe5d9e
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ATLAS_UI_Continue3
+      rect:
+        serializedVersion: 2
+        x: 1742
+        y: 679
+        width: 258
+        height: 261
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6ccb31a3b2a3b184db2a4d3a25f09892
       vertices: []
       indices: 
       edges: []
