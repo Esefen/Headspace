@@ -6613,7 +6613,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fade: {fileID: 1629189741}
-  skipButton: {fileID: 842056643}
+  skipButton: {fileID: 842056645}
   menuPanel: {fileID: 438490451}
   gamePanel: {fileID: 165193762}
   creditsPanel: {fileID: 1318181094}

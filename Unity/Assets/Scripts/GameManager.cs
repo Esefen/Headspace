@@ -10,7 +10,8 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
     public static AudioSource speaker;
     public static AppState gameState = AppState.Menu;
-    public Image fade, skipButton;
+    public Image fade;
+    public Button skipButton;
     public GameObject menuPanel, gamePanel, creditsPanel;
 
     public List<Question> questionLibrary = new List<Question>();
@@ -146,6 +147,7 @@ public class GameManager : MonoBehaviour
 
     void DisplaySkipIcon()
     {
+        skipButton.interactable = true;
         skipButton.GetComponent<Animator>().SetBool("OnOff", true);
     }
 
