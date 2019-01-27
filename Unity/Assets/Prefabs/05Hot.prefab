@@ -43,11 +43,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 815c40697ea73c6418d01da6f9038926, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  possibleAnswers: 0
+  possibleAnswers: 1
   intro: {fileID: 8300000, guid: 09c2bfb87973e8848884a4da71a9c51b, type: 3}
   previewAnswers:
   - {fileID: 8300000, guid: dedb27d1875445847a6c8d38d5071eba, type: 3}
   - {fileID: 8300000, guid: 0ee2043c92f990b409ed844cb7327ef9, type: 3}
+  - {fileID: 8300000, guid: 95a8e5ce960ae024aa206a73ab501a91, type: 3}
   answers:
   - {fileID: 8300000, guid: 84ef197f4c3d7e741b2db90a8f05dc02, type: 3}
   - {fileID: 8300000, guid: bb698f94228bdfd428d0cd76764fa4d6, type: 3}
+  - {fileID: 8300000, guid: 229eb62f5f8a3bf418a77d10cd061c1b, type: 3}
