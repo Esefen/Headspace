@@ -42,6 +42,9 @@ public class PlayerSoundscape : MonoBehaviour
         // Only active in answer mode
         if (GameManager.gameState == AppState.Answer)
         {
+#if UNITY_STANDALONE
+            Vector2 pos = new Vector2(Input.mousePosition.x / Screen.width, Input.mousePosition.y / Screen.height);
+#endif
             if (Input.GetMouseButtonUp(0))
             {
                 if (AnswerSelected()) ChooseAnswer();
@@ -51,11 +54,17 @@ public class PlayerSoundscape : MonoBehaviour
                     focusIcon.GetComponent<Animator>().SetBool("FingerDown", false);
                 }
             }
-            else if (Input.GetMouseButton(0))
+#if UNITY_STANDALONE
+            else if (pos.x >= 0 && pos.x <= 1 && pos.y >= 0 && pos.y <= 1) // Inside game window
+#else
+            else if (Input.GetMouseButton(0)) // Touching screen
+#endif
             {
                 focusIcon.GetComponent<Animator>().SetBool("FingerDown", true);
                 SetCurrentQuestionIcons(true);
+#if !UNITY_STANDALONE
                 Vector2 pos = new Vector2(Input.mousePosition.x / Screen.width, Input.mousePosition.y / Screen.height);
+#endif
                 //Debug.Log("Mouse Position: " + Input.mousePosition.x + ";" + Input.mousePosition.y);
                 //Debug.Log("Mouse Position: " + pos.x + ";" + pos.y);
                 UpdateInteractiveSoundscape(pos);
