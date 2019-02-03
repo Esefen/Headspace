@@ -44,8 +44,10 @@ public class PlayerSoundscape : MonoBehaviour
         {
 #if UNITY_STANDALONE
             Vector2 pos = new Vector2(Input.mousePosition.x / Screen.width, Input.mousePosition.y / Screen.height);
-#endif
             if (Input.GetMouseButtonUp(0))
+#else
+            if (Input.touchCount > 1)
+#endif
             {
                 if (AnswerSelected()) ChooseAnswer();
                 else
